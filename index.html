@@ -97,24 +97,15 @@ hr{
 <label>Select Vehicle</label>
 
 <select id="vehicle" onchange="calculate()">
-
-<option value="j7">
-J7 PHEV
-</option>
-
-<option value="c9">
-C9 PHEV
-</option>
-
+<option value="j7">J7 PHEV</option>
+<option value="c9">C9 PHEV</option>
 </select>
 
 </div>
 
 <div class="card">
 
-<label>
-Daily Distance Travelled
-</label>
+<label>Daily Distance Travelled</label>
 
 <input
 type="range"
@@ -132,9 +123,7 @@ oninput="calculate()">
 
 <div class="card">
 
-<label>
-TNB Tariff Category
-</label>
+<label>TNB Tariff Category</label>
 
 <select id="tariff" onchange="calculate()">
 
@@ -169,9 +158,7 @@ RM <span id="tariffValue">0.571</span>/kWh
 
 <div class="card">
 
-<h2 id="vehicleTitle">
-J7 PHEV
-</h2>
+<h2 id="vehicleTitle">J7 PHEV</h2>
 
 <div class="info">
 Battery Capacity:
@@ -179,13 +166,8 @@ Battery Capacity:
 </div>
 
 <div class="info">
-Fuel Tank Capacity:
-<span id="tank"></span>
-</div>
-
-<div class="info">
-Max Distance:
-<span id="range"></span>
+EV Range:
+<span id="evRange"></span>
 </div>
 
 <hr>
@@ -195,13 +177,13 @@ Max Distance:
 
 <br>
 
-<p>Estimated Cost Per Day</p>
-<div class="result" id="costDay"></div>
+<p>Cost Per KM</p>
+<div class="result" id="costPerKm"></div>
 
 <br>
 
-<p>Estimated Cost Per Year</p>
-<div class="result" id="costYear"></div>
+<p>Estimated Electricity Cost Per Day</p>
+<div class="result" id="dailyCost"></div>
 
 </div>
 
@@ -231,34 +213,31 @@ document.getElementById("tariffValue").innerHTML =
 tariff.toFixed(3);
 
 let battery;
-let tank;
-let range;
+let evRange;
 let name;
 
 if(vehicle==="j7"){
 
 name="J7 PHEV";
 battery=18.3;
-tank=60;
-range=1300;
+evRange=106;
 
 }else{
 
 name="C9 PHEV";
 battery=34.46;
-tank=70;
-range=1100;
+evRange=169;
 
 }
 
 let chargeCost =
 battery * tariff;
 
-let costDay =
-(chargeCost / range) * km;
+let costPerKm =
+chargeCost / evRange;
 
-let costYear =
-costDay * 365;
+let dailyCost =
+costPerKm * km;
 
 document.getElementById("vehicleTitle").innerHTML =
 name;
@@ -266,20 +245,17 @@ name;
 document.getElementById("battery").innerHTML =
 battery + " kWh";
 
-document.getElementById("tank").innerHTML =
-tank + " L";
-
-document.getElementById("range").innerHTML =
-range + " km";
+document.getElementById("evRange").innerHTML =
+evRange + " km";
 
 document.getElementById("chargeCost").innerHTML =
 "RM " + chargeCost.toFixed(2);
 
-document.getElementById("costDay").innerHTML =
-"RM " + costDay.toFixed(2);
+document.getElementById("costPerKm").innerHTML =
+"RM " + costPerKm.toFixed(3);
 
-document.getElementById("costYear").innerHTML =
-"RM " + costYear.toFixed(2);
+document.getElementById("dailyCost").innerHTML =
+"RM " + dailyCost.toFixed(2);
 
 }
 
