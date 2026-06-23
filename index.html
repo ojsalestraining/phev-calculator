@@ -1,10 +1,234 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>OJ PHEV Calculator</title>
+
+<style>
+
+body{
+    background:#0f1115;
+    color:white;
+    font-family:Arial,sans-serif;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:1400px;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+}
+
+.slider-box{
+    background:#1a1d24;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.card{
+    background:#1a1d24;
+    padding:25px;
+    border-radius:12px;
+}
+
+.value{
+    color:#20d7ff;
+    font-size:30px;
+    font-weight:bold;
+}
+
+.info{
+    margin-top:15px;
+    margin-bottom:15px;
+}
+
+.result{
+    border-top:1px solid #333;
+    margin-top:20px;
+    padding-top:20px;
+}
+
+input[type=range]{
+    width:100%;
+}
+
+@media(max-width:900px){
+
+.cards{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+
 </head>
+
 <body>
+
+<div class="container">
+
 <h1>OMODA JAECOO PHEV CALCULATOR</h1>
-<p>Website is working!</p>
+
+<div class="slider-box">
+
+<h3>How many kilometers do you travel per day?</h3>
+
+<input
+type="range"
+id="distance"
+min="1"
+max="200"
+value="30"
+oninput="calculate()">
+
+<div class="value">
+<span id="distanceValue">30</span> km
+</div>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+
+<h2>J7 PHEV</h2>
+
+<div class="info">
+Battery Capacity: 18.3 kWh
+</div>
+
+<div class="info">
+Fuel Tank Capacity: 60L
+</div>
+
+<div class="info">
+Max Distance: 1300 km
+</div>
+
+<div class="result">
+
+<p>Full Charge Cost</p>
+<div class="value" id="j7Charge"></div>
+
+<p>Cost Per Day</p>
+<div class="value" id="j7Day"></div>
+
+<p>Cost Per Year</p>
+<div class="value" id="j7Year"></div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>C9 PHEV</h2>
+
+<div class="info">
+Battery Capacity: 34.36 kWh
+</div>
+
+<div class="info">
+Fuel Tank Capacity: 70L
+</div>
+
+<div class="info">
+Max Distance: 1100 km
+</div>
+
+<div class="result">
+
+<p>Full Charge Cost</p>
+<div class="value" id="c9Charge"></div>
+
+<p>Cost Per Day</p>
+<div class="value" id="c9Day"></div>
+
+<p>Cost Per Year</p>
+<div class="value" id="c9Year"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function calculate(){
+
+let km =
+parseFloat(
+document.getElementById("distance").value
+);
+
+document.getElementById("distanceValue").innerHTML = km;
+
+const tariff = 0.571;
+
+const j7Battery = 18.3;
+const c9Battery = 34.36;
+
+const j7Range = 1300;
+const c9Range = 1100;
+
+let j7Charge =
+j7Battery * tariff;
+
+let c9Charge =
+c9Battery * tariff;
+
+let j7Day =
+(j7Charge/j7Range)*km;
+
+let c9Day =
+(c9Charge/c9Range)*km;
+
+let j7Year =
+j7Day*365;
+
+let c9Year =
+c9Day*365;
+
+document.getElementById("j7Charge").innerHTML =
+"RM " + j7Charge.toFixed(2);
+
+document.getElementById("c9Charge").innerHTML =
+"RM " + c9Charge.toFixed(2);
+
+document.getElementById("j7Day").innerHTML =
+"RM " + j7Day.toFixed(2);
+
+document.getElementById("c9Day").innerHTML =
+"RM " + c9Day.toFixed(2);
+
+document.getElementById("j7Year").innerHTML =
+"RM " + j7Year.toFixed(2);
+
+document.getElementById("c9Year").innerHTML =
+"RM " + c9Year.toFixed(2);
+
+}
+
+calculate();
+
+</script>
+
 </body>
 </html>
