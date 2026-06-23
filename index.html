@@ -185,6 +185,11 @@ Combined Range:
 <span id="combinedRange"></span>
 </div>
 
+<div class="info">
+Fuel Tank Capacity:
+<span id="fuelTank"></span>
+</div>
+    
 <hr>
 
 <p>Full Charge Cost</p>
@@ -296,6 +301,9 @@ evRange + " km";
 
 document.getElementById("combinedRange").innerHTML =
 combinedRange + " km";
+
+document.getElementById("fuelTank").innerHTML =
+fuelTank + " L";
 
 document.getElementById("chargeCost").innerHTML =
 "RM " + chargeCost.toFixed(2);
