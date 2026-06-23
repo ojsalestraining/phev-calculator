@@ -133,19 +133,35 @@ oninput="calculate()">
 <div class="card">
 
 <label>
-TNB Tariff
+TNB Tariff Category
 </label>
 
-<input
-type="range"
-id="tariff"
-min="0.30"
-max="1.00"
-step="0.001"
-value="0.571"
-oninput="calculate()">
+<select id="tariff" onchange="calculate()">
+
+<option value="0.218">
+First 200 kWh (RM0.218/kWh)
+</option>
+
+<option value="0.334">
+Next 100 kWh (201-300) (RM0.334/kWh)
+</option>
+
+<option value="0.516">
+Next 300 kWh (301-600) (RM0.516/kWh)
+</option>
+
+<option value="0.546">
+Next 300 kWh (601-900) (RM0.546/kWh)
+</option>
+
+<option value="0.571" selected>
+Above 900 kWh (RM0.571/kWh)
+</option>
+
+</select>
 
 <div class="value-box">
+Selected Tariff:
 RM <span id="tariffValue">0.571</span>/kWh
 </div>
 
