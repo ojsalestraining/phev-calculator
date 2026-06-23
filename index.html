@@ -35,6 +35,10 @@ h1{
     margin-bottom:30px;
 }
 
+h3{
+    color:#3ae7ff;
+}
+
 label{
     display:block;
     margin-bottom:10px;
@@ -76,6 +80,11 @@ select{
 .info{
     margin-top:15px;
     font-size:18px;
+}
+
+#salesPitch{
+    font-size:18px;
+    line-height:1.6;
 }
 
 hr{
@@ -187,6 +196,14 @@ EV Range:
 
 </div>
 
+<div class="card">
+
+<h3>Your Weekly Charging Cost</h3>
+
+<p id="salesPitch"></p>
+
+</div>
+
 </div>
 
 <script>
@@ -239,6 +256,12 @@ chargeCost / evRange;
 let dailyCost =
 costPerKm * km;
 
+let weeklyDistance =
+km * 5;
+
+let weeklyCost =
+dailyCost * 5;
+
 document.getElementById("vehicleTitle").innerHTML =
 name;
 
@@ -256,6 +279,15 @@ document.getElementById("costPerKm").innerHTML =
 
 document.getElementById("dailyCost").innerHTML =
 "RM " + dailyCost.toFixed(2);
+
+document.getElementById("salesPitch").innerHTML =
+"With your daily commute of <b>" +
+km +
+" km</b>, you travel approximately <b>" +
+weeklyDistance +
+" km per week</b> (based on 5 working days).<br><br>You will only spend approximately <b>RM " +
+weeklyCost.toFixed(2) +
+"</b> per week on charging.";
 
 }
 
