@@ -1,76 +1,85 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>OJ PHEV Calculator</title>
 
 <style>
 
 body{
-    background:#0f1115;
-    color:white;
-    font-family:Arial,sans-serif;
     margin:0;
     padding:20px;
+    background:#0f1115;
+    color:white;
+    font-family:Arial, sans-serif;
 }
 
 .container{
-    max-width:1400px;
+    max-width:1200px;
     margin:auto;
+}
+
+.card{
+    background:#181b22;
+    border-radius:15px;
+    padding:25px;
+    margin-bottom:20px;
 }
 
 h1{
     text-align:center;
+    margin-bottom:30px;
 }
 
-.slider-box{
-    background:#1a1d24;
-    padding:20px;
-    border-radius:12px;
-    margin-bottom:20px;
-}
-
-.cards{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
-}
-
-.card{
-    background:#1a1d24;
-    padding:25px;
-    border-radius:12px;
-}
-
-.value{
-    color:#20d7ff;
-    font-size:30px;
+label{
+    display:block;
+    margin-bottom:10px;
     font-weight:bold;
-}
-
-.info{
-    margin-top:15px;
-    margin-bottom:15px;
-}
-
-.result{
-    border-top:1px solid #333;
-    margin-top:20px;
-    padding-top:20px;
 }
 
 input[type=range]{
     width:100%;
 }
 
-@media(max-width:900px){
-
-.cards{
-grid-template-columns:1fr;
+select{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    background:#000;
+    color:white;
+    font-size:16px;
 }
 
+.value-box{
+    margin-top:10px;
+    background:#000;
+    border:1px solid #3ae7ff;
+    box-shadow:0 0 15px rgba(58,231,255,.4);
+    border-radius:10px;
+    padding:12px;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.result{
+    color:#3ae7ff;
+    font-size:28px;
+    font-weight:bold;
+}
+
+.info{
+    margin-top:15px;
+    font-size:18px;
+}
+
+hr{
+    border-color:#333;
 }
 
 </style>
@@ -83,9 +92,29 @@ grid-template-columns:1fr;
 
 <h1>OMODA JAECOO PHEV CALCULATOR</h1>
 
-<div class="slider-box">
+<div class="card">
 
-<h3>How many kilometers do you travel per day?</h3>
+<label>Select Vehicle</label>
+
+<select id="vehicle" onchange="calculate()">
+
+<option value="j7">
+J7 PHEV
+</option>
+
+<option value="c9">
+C9 PHEV
+</option>
+
+</select>
+
+</div>
+
+<div class="card">
+
+<label>
+Daily Distance Travelled
+</label>
 
 <input
 type="range"
@@ -95,75 +124,68 @@ max="200"
 value="30"
 oninput="calculate()">
 
-<div class="value">
-<span id="distanceValue">30</span> km
-</div>
-
-</div>
-
-<div class="cards">
-
-<div class="card">
-
-<h2>J7 PHEV</h2>
-
-<div class="info">
-Battery Capacity: 18.3 kWh
-</div>
-
-<div class="info">
-Fuel Tank Capacity: 60L
-</div>
-
-<div class="info">
-Max Distance: 1300 km
-</div>
-
-<div class="result">
-
-<p>Full Charge Cost</p>
-<div class="value" id="j7Charge"></div>
-
-<p>Cost Per Day</p>
-<div class="value" id="j7Day"></div>
-
-<p>Cost Per Year</p>
-<div class="value" id="j7Year"></div>
-
+<div class="value-box">
+<span id="distanceValue">30</span> km/day
 </div>
 
 </div>
 
 <div class="card">
 
-<h2>C9 PHEV</h2>
+<label>
+TNB Tariff
+</label>
+
+<input
+type="range"
+id="tariff"
+min="0.30"
+max="1.00"
+step="0.001"
+value="0.571"
+oninput="calculate()">
+
+<div class="value-box">
+RM <span id="tariffValue">0.571</span>/kWh
+</div>
+
+</div>
+
+<div class="card">
+
+<h2 id="vehicleTitle">
+J7 PHEV
+</h2>
 
 <div class="info">
-Battery Capacity: 34.36 kWh
+Battery Capacity:
+<span id="battery"></span>
 </div>
 
 <div class="info">
-Fuel Tank Capacity: 70L
+Fuel Tank Capacity:
+<span id="tank"></span>
 </div>
 
 <div class="info">
-Max Distance: 1100 km
+Max Distance:
+<span id="range"></span>
 </div>
 
-<div class="result">
+<hr>
 
 <p>Full Charge Cost</p>
-<div class="value" id="c9Charge"></div>
+<div class="result" id="chargeCost"></div>
 
-<p>Cost Per Day</p>
-<div class="value" id="c9Day"></div>
+<br>
 
-<p>Cost Per Year</p>
-<div class="value" id="c9Year"></div>
+<p>Estimated Cost Per Day</p>
+<div class="result" id="costDay"></div>
 
-</div>
+<br>
 
-</div>
+<p>Estimated Cost Per Year</p>
+<div class="result" id="costYear"></div>
 
 </div>
 
@@ -173,56 +195,75 @@ Max Distance: 1100 km
 
 function calculate(){
 
+let vehicle =
+document.getElementById("vehicle").value;
+
 let km =
 parseFloat(
 document.getElementById("distance").value
 );
 
-document.getElementById("distanceValue").innerHTML = km;
+let tariff =
+parseFloat(
+document.getElementById("tariff").value
+);
 
-const tariff = 0.571;
+document.getElementById("distanceValue").innerHTML =
+km;
 
-const j7Battery = 18.3;
-const c9Battery = 34.36;
+document.getElementById("tariffValue").innerHTML =
+tariff.toFixed(3);
 
-const j7Range = 1300;
-const c9Range = 1100;
+let battery;
+let tank;
+let range;
+let name;
 
-let j7Charge =
-j7Battery * tariff;
+if(vehicle==="j7"){
 
-let c9Charge =
-c9Battery * tariff;
+name="J7 PHEV";
+battery=18.3;
+tank=60;
+range=1300;
 
-let j7Day =
-(j7Charge/j7Range)*km;
+}else{
 
-let c9Day =
-(c9Charge/c9Range)*km;
+name="C9 PHEV";
+battery=34.36;
+tank=70;
+range=1100;
 
-let j7Year =
-j7Day*365;
+}
 
-let c9Year =
-c9Day*365;
+let chargeCost =
+battery * tariff;
 
-document.getElementById("j7Charge").innerHTML =
-"RM " + j7Charge.toFixed(2);
+let costDay =
+(chargeCost / range) * km;
 
-document.getElementById("c9Charge").innerHTML =
-"RM " + c9Charge.toFixed(2);
+let costYear =
+costDay * 365;
 
-document.getElementById("j7Day").innerHTML =
-"RM " + j7Day.toFixed(2);
+document.getElementById("vehicleTitle").innerHTML =
+name;
 
-document.getElementById("c9Day").innerHTML =
-"RM " + c9Day.toFixed(2);
+document.getElementById("battery").innerHTML =
+battery + " kWh";
 
-document.getElementById("j7Year").innerHTML =
-"RM " + j7Year.toFixed(2);
+document.getElementById("tank").innerHTML =
+tank + " L";
 
-document.getElementById("c9Year").innerHTML =
-"RM " + c9Year.toFixed(2);
+document.getElementById("range").innerHTML =
+range + " km";
+
+document.getElementById("chargeCost").innerHTML =
+"RM " + chargeCost.toFixed(2);
+
+document.getElementById("costDay").innerHTML =
+"RM " + costDay.toFixed(2);
+
+document.getElementById("costYear").innerHTML =
+"RM " + costYear.toFixed(2);
 
 }
 
@@ -231,4 +272,5 @@ calculate();
 </script>
 
 </body>
+
 </html>
