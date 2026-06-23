@@ -82,7 +82,8 @@ select{
     font-size:18px;
 }
 
-#salesPitch{
+#salesPitch,
+#refuellingPitch{
     font-size:18px;
     line-height:1.6;
 }
@@ -179,6 +180,11 @@ EV Range:
 <span id="evRange"></span>
 </div>
 
+<div class="info">
+Combined Range:
+<span id="combinedRange"></span>
+</div>
+
 <hr>
 
 <p>Full Charge Cost</p>
@@ -201,6 +207,14 @@ EV Range:
 <h3>Your Weekly Charging Cost</h3>
 
 <p id="salesPitch"></p>
+
+</div>
+
+<div class="card">
+
+<h3>Estimated Refuelling Frequency</h3>
+
+<p id="refuellingPitch"></p>
 
 </div>
 
@@ -231,6 +245,8 @@ tariff.toFixed(3);
 
 let battery;
 let evRange;
+let combinedRange;
+let fuelTank;
 let name;
 
 if(vehicle==="j7"){
@@ -238,12 +254,16 @@ if(vehicle==="j7"){
 name="J7 PHEV";
 battery=18.3;
 evRange=106;
+combinedRange=1300;
+fuelTank=60;
 
 }else{
 
 name="C9 PHEV";
 battery=34.46;
 evRange=169;
+combinedRange=1100;
+fuelTank=70;
 
 }
 
@@ -262,6 +282,9 @@ km * 5;
 let weeklyCost =
 dailyCost * 5;
 
+let daysBeforeRefuel =
+combinedRange / km;
+
 document.getElementById("vehicleTitle").innerHTML =
 name;
 
@@ -270,6 +293,9 @@ battery + " kWh";
 
 document.getElementById("evRange").innerHTML =
 evRange + " km";
+
+document.getElementById("combinedRange").innerHTML =
+combinedRange + " km";
 
 document.getElementById("chargeCost").innerHTML =
 "RM " + chargeCost.toFixed(2);
@@ -288,6 +314,17 @@ weeklyDistance +
 " km per week</b> (based on 5 working days).<br><br>You will only spend approximately <b>RM " +
 weeklyCost.toFixed(2) +
 "</b> per week on charging.";
+
+document.getElementById("refuellingPitch").innerHTML =
+"With a full charge and full tank, the <b>" +
+name +
+"</b> offers a combined driving range of <b>" +
+combinedRange +
+" km</b>.<br><br>Based on your daily travel of <b>" +
+km +
+" km</b>, you may only need to refuel approximately once every <b>" +
+daysBeforeRefuel.toFixed(1) +
+" days</b>.";
 
 }
 
